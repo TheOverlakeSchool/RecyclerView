@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         List<String> words = WordList.getInstance().getWords();
-        binding.recyclerView.setAdapter(new WordListAdapter(words));
+        binding.recyclerView.setAdapter(new WordListAdapter(words, getLayoutInflater()));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        setContentView(R.layout.activity_main);
+        setContentView(binding.getRoot());
     }
 }
