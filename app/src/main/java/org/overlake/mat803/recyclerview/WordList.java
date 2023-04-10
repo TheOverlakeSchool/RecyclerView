@@ -9,10 +9,7 @@ public class WordList {
    public static WordList sWordList = new WordList();
 
    private WordList() {
-      mWords = new ArrayList<>(20);
-      for (int i = 0; i < 20; i++) {
-         mWords.add("Word" + i);
-      }
+      reset();
    }
 
    public static WordList getInstance() {
@@ -24,4 +21,22 @@ public class WordList {
       return mWords;
    }
 
+   public void set(String word, int position) {
+      mWords.set(position, word);
+   }
+
+   public String get(int position) {
+      return mWords.get(position);
+   }
+
+   public void remove(int position) {
+      mWords.remove(position);
+   }
+
+   public void reset() {
+      mWords = new ArrayList<>(20);
+      for (int i = 1; i <= 20; i++) {
+         mWords.add("Word" + i);
+      }
+   }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/wordListFragment">
+
+    <fragment
+        android:id="@+id/wordListFragment"
+        android:name="org.overlake.mat803.recyclerview.WordListFragment"
+        android:label="WordListFragment" />
+    <dialog
+        android:id="@+id/wordListUpdateFragment"
+        android:name="org.overlake.mat803.recyclerview.WordListUpdateFragment"
+        android:label="WordListUpdateFragment" />
+</navigation>

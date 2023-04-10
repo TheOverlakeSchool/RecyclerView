@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import org.overlake.mat803.recyclerview.databinding.ActivityMainBinding;
+import org.overlake.mat803.recyclerview.databinding.WordListFragmentBinding;
 
 import java.util.List;
 
@@ -14,10 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        List<String> words = WordList.getInstance().getWords();
-        binding.recyclerView.setAdapter(new WordListAdapter(words, getLayoutInflater()));
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
     }
+
 }

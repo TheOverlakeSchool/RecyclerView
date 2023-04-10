@@ -1,5 +1,7 @@
 package org.overlake.mat803.recyclerview;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.overlake.mat803.recyclerview.databinding.WordListItemBinding;
@@ -15,20 +21,22 @@ import java.util.List;
 
 class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewHolder> {
 
-    List<String> mWords;
+    WordList mWords;
     LayoutInflater mLayoutInflater;
-    int holderCount;
+    NavController mNavController;
+    Fragment mHost;
 
-    WordListAdapter(List<String> words, LayoutInflater inflater) {
-        mWords = words;
-        mLayoutInflater = inflater;
+    WordListAdapter(WordList wordList, Fragment host) {
+        mWords = wordList;
+        mHost = host;
+        mLayoutInflater = host.getLayoutInflater();
+        mNavController = NavHostFragment.findNavController(host);
     }
 
     @NonNull
     @Override
     public WordListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         WordListItemBinding binding = WordListItemBinding.inflate(mLayoutInflater);
-        Log.d("WordListAdapter", "Holder created: " + ++holderCount);
         return new WordListViewHolder(binding);
     }
 
@@ -39,7 +47,7 @@ class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewH
 
     @Override
     public int getItemCount() {
-        return mWords.size();
+        return mWords.getWords().size();
     }
 
     class WordListViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +58,9 @@ class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewH
             super(binding.getRoot());
             mWord = binding.word;
             mWord.setOnClickListener(v-> {
-                mWord.setText(mWord.getText() + " -- updated");
+                Bundle bundle = new Bundle();
+                bundle.putInt(WordListUpdateFragment.POSITION, getLayoutPosition());
+                mNavController.navigate(R.id.wordListUpdateFragment, bundle);
             });
         }
 
