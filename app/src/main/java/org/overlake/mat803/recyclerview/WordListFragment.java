@@ -19,41 +19,50 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.overlake.mat803.recyclerview.databinding.WordListFragmentBinding;
 
-import java.util.List;
-
 public class WordListFragment extends Fragment {
+
    private WordList mWords;
+   private org.overlake.mat803.recyclerview.databinding.WordListFragmentBinding mBinding;
 
-
-   @Nullable
    @Override
-   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-      WordListFragmentBinding binding = WordListFragmentBinding.inflate(getLayoutInflater());
+   public void onCreate(@Nullable Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      mBinding = WordListFragmentBinding.inflate(getLayoutInflater());
       mWords = WordList.getInstance();
-      binding.recyclerView.setAdapter(new WordListAdapter(mWords, this));
-      binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+      mBinding.recyclerView.setAdapter(new WordListAdapter(mWords, this));
+      mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+      setListener();
+      setMenu();
+   }
+
+   private void setListener() {
       getParentFragmentManager().setFragmentResultListener(DIALOG_RESULT, this, new FragmentResultListener() {
          @Override
          public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
             int position = result.getInt(POSITION);
             if (result.getInt(ACTION) == AlertDialog.BUTTON_NEGATIVE) {
                mWords.remove(position);
-               binding.recyclerView.getAdapter().notifyDataSetChanged();
+               mBinding.recyclerView.getAdapter().notifyDataSetChanged();
             } else {
                String word = result.getString(WORD);
                mWords.set(word, position);
-               binding.recyclerView.getAdapter().notifyItemChanged(position);
+               mBinding.recyclerView.getAdapter().notifyItemChanged(position);
             }
-
          }
       });
+   }
 
+   @Nullable
+   @Override
+   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+      return mBinding.getRoot();
+   }
+
+   private void setMenu() {
       getActivity().addMenuProvider(new MenuProvider() {
          @Override
          public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
@@ -63,11 +72,10 @@ public class WordListFragment extends Fragment {
          @Override
          public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
             mWords.reset();
-            binding.recyclerView.getAdapter().notifyDataSetChanged();
+            mBinding.recyclerView.getAdapter().notifyDataSetChanged();
             return true;
          }
       });
-      return binding.getRoot();
    }
 
 
