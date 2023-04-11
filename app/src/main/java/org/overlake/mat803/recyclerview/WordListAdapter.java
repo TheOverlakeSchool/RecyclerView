@@ -60,6 +60,8 @@ class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewH
             mWord.setOnClickListener(v-> {
                 Bundle bundle = new Bundle();
                 bundle.putInt(WordListUpdateFragment.POSITION, getLayoutPosition());
+                bundle.putString(WordListUpdateFragment.WORD, mWords.get(getLayoutPosition()));
+
                 mNavController.navigate(R.id.wordListUpdateFragment, bundle);
             });
         }

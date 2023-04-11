@@ -23,13 +23,11 @@ public class WordListUpdateFragment extends DialogFragment {
     public static final String WORD = "word";
     public static final String DIALOG_RESULT = "dialog_result";
     public static final String ACTION = "action";
-    private WordList mWordList;
-    FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWordList = WordList.getInstance();
         mFragmentManager = this.getParentFragmentManager();
     }
 
@@ -39,7 +37,7 @@ public class WordListUpdateFragment extends DialogFragment {
         WordDialogBinding binding = WordDialogBinding.inflate(getLayoutInflater());
         Bundle arguments = getArguments();
         int position = arguments.getInt(POSITION);
-        String word = mWordList.get(position);
+        String word = arguments.getString(WORD);
         binding.input.setText(word);
         return new AlertDialog.Builder(getContext())
                 .setMessage("Word #" + (position + 1) + ":")
