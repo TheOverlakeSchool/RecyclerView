@@ -15,18 +15,19 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.overlake.mat803.recyclerview.database.Word;
 import org.overlake.mat803.recyclerview.databinding.WordListItemBinding;
 
 import java.util.List;
 
 class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewHolder> {
 
-    WordList mWords;
+    List<Word> mWords;
     LayoutInflater mLayoutInflater;
     NavController mNavController;
     Fragment mHost;
 
-    WordListAdapter(WordList wordList, Fragment host) {
+    WordListAdapter(List<Word> wordList, Fragment host) {
         mWords = wordList;
         mHost = host;
         mLayoutInflater = host.getLayoutInflater();
@@ -42,12 +43,12 @@ class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewH
 
     @Override
     public void onBindViewHolder(@NonNull WordListViewHolder holder, int position) {
-        holder.setText(mWords.get(position));
+        holder.setText(mWords.get(position).getWord());
     }
 
     @Override
     public int getItemCount() {
-        return mWords.getWords().size();
+        return mWords.size();
     }
 
     class WordListViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +61,7 @@ class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewH
             mWord.setOnClickListener(v-> {
                 Bundle bundle = new Bundle();
                 bundle.putInt(WordListUpdateFragment.POSITION, getLayoutPosition());
-                bundle.putString(WordListUpdateFragment.WORD, mWords.get(getLayoutPosition()));
+                bundle.putString(WordListUpdateFragment.WORD, mWords.get(getLayoutPosition()).getWord());
 
                 mNavController.navigate(R.id.wordListUpdateFragment, bundle);
             });

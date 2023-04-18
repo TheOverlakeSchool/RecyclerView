@@ -20,19 +20,30 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.room.Room;
 
+import org.overlake.mat803.recyclerview.database.Word;
+import org.overlake.mat803.recyclerview.database.WordDao;
+import org.overlake.mat803.recyclerview.database.WordDatabase;
 import org.overlake.mat803.recyclerview.databinding.WordListFragmentBinding;
+
+import java.util.List;
 
 public class WordListFragment extends Fragment {
 
-   private WordList mWords;
+   private List<Word> mWords;
    private org.overlake.mat803.recyclerview.databinding.WordListFragmentBinding mBinding;
 
    @Override
    public void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       mBinding = WordListFragmentBinding.inflate(getLayoutInflater());
-      mWords = WordList.getInstance();
+      WordDatabase database = Room.databaseBuilder(getContext(), WordDatabase.class, "WordDatabase.db")
+                      .createFromAsset("database/words.db")
+                              .allowMainThreadQueries()
+                                      .build();
+      WordDao dao = database.getDao();
+      mWords = dao.getWords();
       mBinding.recyclerView.setAdapter(new WordListAdapter(mWords, this));
       mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
       setListener();
@@ -45,11 +56,11 @@ public class WordListFragment extends Fragment {
          public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
             int position = result.getInt(POSITION);
             if (result.getInt(ACTION) == AlertDialog.BUTTON_NEGATIVE) {
-               mWords.remove(position);
+          //     mWords.remove(position);
                mBinding.recyclerView.getAdapter().notifyDataSetChanged();
             } else {
                String word = result.getString(WORD);
-               mWords.set(word, position);
+          //     mWords.set(word, position);
                mBinding.recyclerView.getAdapter().notifyItemChanged(position);
             }
          }
@@ -71,7 +82,7 @@ public class WordListFragment extends Fragment {
 
          @Override
          public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-            mWords.reset();
+           // mWords.reset();
             mBinding.recyclerView.getAdapter().notifyDataSetChanged();
             return true;
          }
